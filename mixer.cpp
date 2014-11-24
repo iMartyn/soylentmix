@@ -36,6 +36,14 @@ Mixer::Mixer () {
     hoppers[4] = 5;
 }
 
+void Mixer::openHopper(int) {
+    //TODO yeah, code this
+}
+
+void Mixer::closeHopper(int) {
+    //TODO yeah, code this
+}
+
 void Mixer::pourPowder(int hopper, int weightValue) {
     int startValue = takeAverageReading(DEFAULT_READINGS, DEFAULT_DELAY);
     int targetValue = startValue + weightValue;
@@ -58,7 +66,6 @@ int Mixer::takeAverageReading(int averageHowManyReadings, int delayBetweenReadin
 
 int Mixer::takeReading() {
     int val = rand() % 500 + 50;
-    printf("returning %i\n", val);
     return val;
 }
 /*
@@ -67,7 +74,6 @@ int Mixer::takeReading() {
 int main(int argc, char** argv) {
     Mixer aMixer;
     int avg = aMixer.takeAverageReading(4,1);
-    printf("actual average %i", avg);
     return 0;
 }
 
