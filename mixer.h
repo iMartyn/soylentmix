@@ -7,12 +7,40 @@
 
 #ifndef MIXER_H
 #define	MIXER_H
+#include "Arduino.h"
 
-#define DEFAULT_READINGS 5 // average over this many
-#define DEFAULT_DELAY 5 // in millis
+
 #define MAX_HOPPERS 7
+#define DEFAULT_SPI_CS_PIN 10
+#define BASE_ZERO_READING 813
 
-#define BASE_ZERO_READING 817
+class Mixer {
+    // The pins for the servos on the hoppers
+    int hoppers[MAX_HOPPERS];
+    int currentZeroReading = BASE_ZERO_READING;
+    boolean readModeSPI = true;
+    int analogReadPin = -1;
+    int SPICsPin = DEFAULT_SPI_CS_PIN;
+    int takeSPIReading();
+    int takeReadingActual();
+public:
+    Mixer();
+    void begin();
+    void resetZero();
+    void setReadModeSPI(int);
+    void setReadModeAnalog(int);
+    float getGrams();
+    int takeReading();
+    int takeAverageReading(int,int);
+    float readingToGrams(int);
+    void pourPowder(int,int);
+    void openHopper(int);
+    void closeHopper(int);
+};
+
+#define DEFAULT_READINGS 10 // average over this many
+#define DEFAULT_DELAY 1 // in millis
+
 
 // Correction "curve" for readings to grams
 #define READINGS_TO_GRAMS_COUNT 10
