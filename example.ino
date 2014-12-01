@@ -9,6 +9,7 @@ long ticks = 0;
 
 // for Leonardo
 #define SELPIN 10    // chip-select
+#define ZEROBUTTON A1
 
 int readvalue; 
 
@@ -27,6 +28,7 @@ void setup(){
   SPI.begin(); */
   /* use the class */
   aMixer.begin();
+  pinMode(ZEROBUTTON, INPUT_PULLUP);
 
   Serial.begin(115200); 
 }
@@ -37,7 +39,13 @@ void loop() {
   float Grams = aMixer.getGrams();
   Serial.print(Grams);
   Serial.println(" grams");
-  delay(100);
+  for (int i = 0; i<=9; i++) {
+    if (digitalRead(ZEROBUTTON) == LOW) {
+      Serial.println("Resetting...");
+      aMixer.resetZero();
+    }
+    delay(50);
+  }
   /* use example/debug code
   int A = read_adc(0);
   delay(500); */
