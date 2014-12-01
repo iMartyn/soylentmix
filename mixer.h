@@ -12,6 +12,7 @@
 
 #define MAX_HOPPERS 7
 #define DEFAULT_SPI_CS_PIN 10
+#define DEFAULT_ANALOG_PIN A0
 #define BASE_ZERO_READING 813
 
 class Mixer {

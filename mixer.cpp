@@ -30,7 +30,7 @@ void Mixer::resetZero() {
 
 void Mixer::begin(){
   //Arduino code, yuk, we move initialisers to begin because other stuff might need it not initialised
-  this->setReadModeSPI(DEFAULT_SPI_CS_PIN);  
+  this->setReadModeAnalog(DEFAULT_ANALOG_PIN);  
 }
 
 void Mixer::setReadModeSPI(int chipSelectPin) {
