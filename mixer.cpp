@@ -112,26 +112,31 @@ int Mixer::takeReadingActual() {
     int reading;
     if (this->readModeSPI) {
         reading = this->takeSPIReading();
-        return reading;
     } else {
-        return analogRead(this->analogReadPin);
+        reading = analogRead(this->analogReadPin);
     }
+        return reading;
 }
 
 float Mixer::readingToGrams(int reading) {
-    if (reading - BASE_ZERO_READING < 3.1) return 0;
+    if (reading - this->currentZeroReading < UNITS_PER_GRAM) return 0;
     float lookupIndex [] = READINGS_TO_GRAMS_INDEX;
     float lookupValue [] = READINGS_TO_GRAMS_VALUES;
-    for (int i=0; i<READINGS_TO_GRAMS_COUNT; i++) {
+   /* for (int i=0; i<READINGS_TO_GRAMS_COUNT; i++) {
         if (reading >= lookupIndex[i]) {
             // Apparently the curve is wrong, and 3.16 is about right!
-            return (reading-BASE_ZERO_READING)/3.16;
-            return (reading-BASE_ZERO_READING)/lookupValue[i];
+            return (reading-this->currentZeroReading)/lookupValue[i];
         }
-    }
+    }*/
+    float grams = (reading-this->currentZeroReading)/UNITS_PER_GRAM;
+    return grams;
 }
 
 float Mixer::getGrams() {
   int reading = this->takeReading();
+  Serial.print(this->currentZeroReading);
+  Serial.print('/');
+  Serial.print("Reading ");
+  Serial.println(reading);
   return this->readingToGrams(reading);
 }

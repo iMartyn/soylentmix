@@ -13,7 +13,11 @@
 #define MAX_HOPPERS 7
 #define DEFAULT_SPI_CS_PIN 10
 #define DEFAULT_ANALOG_PIN A0
-#define BASE_ZERO_READING 813
+#define BASE_ZERO_READING 456
+// differential on SPI chip
+//#define UNITS_PER_GRAM 3.1
+// via analog pin
+#define UNITS_PER_GRAM 1.019
 
 class Mixer {
     // The pins for the servos on the hoppers
