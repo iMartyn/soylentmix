@@ -3,6 +3,7 @@
 #include <SPI.h>
 #include <HardwareSerial.h>
 #include "mixer.h"
+#include "keypad.h"
 
 long ticks = 0;
 
@@ -14,6 +15,7 @@ long ticks = 0;
 int readvalue; 
 
   Mixer aMixer;
+  Keypad aKeypad;
 
 void setup(){ 
   /*debug/example version 
@@ -28,14 +30,28 @@ void setup(){
   SPI.begin(); */
   /* use the class */
   aMixer.begin();
+  Serial.begin(115200); 
+  if (!Serial) {
+    while (!Serial) {
+      delay(1);
+    }
+  }
+  aKeypad.begin();
   pinMode(ZEROBUTTON, INPUT_PULLUP);
 
-  Serial.begin(115200); 
 }
 
 
 void loop() {
-  /*  Use the class */ 
+  aKeypad.debugMap();
+  char readKey;
+  readKey = aKeypad.keyScan();
+  if (readKey != 0) {
+    Serial.println(readKey);
+  }
+  delay(5);
+//  aKeypad.debugMap();
+  /*  Use the class 
   float Grams = aMixer.getGrams();
   Serial.print(Grams);
   Serial.println(" grams");
