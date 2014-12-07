@@ -17,11 +17,22 @@ void sleep(int) {}
 
 Mixer::Mixer () {
   this->currentZeroReading = BASE_ZERO_READING;
-/*    hoppers[0] = HOPPER_PIN_1;
-    hoppers[1] = HOPPER_PIN_2;
-    hoppers[2] = HOPPER_PIN_3;
-    hoppers[3] = HOPPER_PIN_4;
-    hoppers[4] = HOPPER_PIN_5;*/
+  int arr[MAX_RECIPES][MAX_HOPPERS] = RECIPES;
+  for (int i=0; i<MAX_HOPPERS; i++) {
+    this->hoppers[0] = -1;
+    this->ingredients[0] = "Unknown ingredient";
+    for (int j=0; j<MAX_RECIPES; j++) {
+      this->recipes[j][i] = arr[j][i];
+    }
+  }
+  hoppers[0] = HOPPER_PIN_1;
+  hoppers[1] = HOPPER_PIN_2;
+  hoppers[2] = HOPPER_PIN_3;
+  hoppers[3] = HOPPER_PIN_4;
+  ingredients[0] = INGREDIENT_1;
+  ingredients[1] = INGREDIENT_2;
+  ingredients[2] = INGREDIENT_3;
+  ingredients[3] = INGREDIENT_4;
 }
 
 void Mixer::resetZero() {
@@ -115,7 +126,7 @@ int Mixer::takeReadingActual() {
     } else {
         reading = analogRead(this->analogReadPin);
     }
-        return reading;
+    return reading;
 }
 
 float Mixer::readingToGrams(int reading) {
@@ -139,4 +150,8 @@ float Mixer::getGrams() {
   Serial.print("Reading ");
   Serial.println(reading);
   return this->readingToGrams(reading);
+}
+
+void Mixer::runRecipe(int recipeIndex) {
+  
 }
