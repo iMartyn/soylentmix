@@ -43,7 +43,6 @@ void setup(){
 
 
 void loop() {
-  aKeypad.debugMap();
   char readKey;
   readKey = aKeypad.keyScan();
   if (readKey != 0) {
