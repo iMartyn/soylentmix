@@ -34,6 +34,7 @@ class Mixer {
 public:
     Mixer();
     void begin();
+    void setZero(int);
     void resetZero();
     void setReadModeSPI(int);
     void setReadModeAnalog(int);

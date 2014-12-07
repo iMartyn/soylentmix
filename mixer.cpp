@@ -36,7 +36,11 @@ Mixer::Mixer () {
 }
 
 void Mixer::resetZero() {
-  this->currentZeroReading = this->takeReading();
+  this->setZero(this->takeReading());
+}
+
+void Mixer::setZero(int reading){
+  this->currentZeroReading = reading;
 }
 
 void Mixer::begin(){
@@ -153,5 +157,32 @@ float Mixer::getGrams() {
 }
 
 void Mixer::runRecipe(int recipeIndex) {
-  
+  int currentReading = 0;
+  int originalReading = takeReading();
+  int currentGrams = 0;
+  for (int i=0; i<MAX_HOPPERS; i++) {
+    if (this->recipes[recipeIndex][i]>0) {
+      Serial.println("Zeroing...");
+      this->resetZero();
+      Serial.print("Opening Hopper ");
+      Serial.print(i);
+      Serial.print(" and pouring ");
+      Serial.print(this->recipes[recipeIndex][i]);
+      Serial.print(" grams of ");
+      Serial.print(this->ingredients[i]);
+      Serial.println("...");
+      this->openHopper(i);
+      currentGrams = 0;
+      while (currentGrams < this->recipes[recipeIndex][i]) {
+        currentReading = this->takeReading();
+        currentGrams = this->readingToGrams(currentReading);
+      }
+      Serial.println("Reached or overshot!");
+      Serial.print("Closing hopper ");
+      Serial.print(i);
+      Serial.println(" and continuing...");
+      this->closeHopper(i);
+    }
+  }
+  this->setZero(originalReading);
 }
