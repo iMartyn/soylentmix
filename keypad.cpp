@@ -1,4 +1,5 @@
 #include "keypad.h"
+#include "ioexpander.h"
 #include <HardwareSerial.h>
 
 Keypad::Keypad() {

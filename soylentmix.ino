@@ -1,14 +1,20 @@
+#include <Wire.h>
 #include <SPI.h>
 #include <HardwareSerial.h>
+#include "ioexpander.h"
 #include "mixer.h"
 #include "keypad.h"
 
   int readvalue; 
   Mixer aMixer;
   Keypad aKeypad;
+  
+  #define LED 108
 
 void setup(){ 
+  
   aMixer.begin();
+  aMixer.setReadModeSPI(10);
   Serial.begin(115200); 
   if (!Serial) {
     while (!Serial) {
