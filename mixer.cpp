@@ -51,6 +51,7 @@ void Mixer::begin(){
 void Mixer::setReadModeSPI(int chipSelectPin) {
   this->readModeSPI = true;
   this->SPICsPin = chipSelectPin;
+  pinMode(this->SPICsPin, OUTPUT);
   digitalWrite (this->SPICsPin, HIGH); // Turn off adc until we need it  
   SPI.setClockDivider( SPI_CLOCK_DIV64 ); // slow the SPI bus down
   SPI.setBitOrder(MSBFIRST);
@@ -97,7 +98,7 @@ int Mixer::takeAverageReading(int averageHowManyReadings, int delayBetweenReadin
 int Mixer::takeSPIReading() {
   int b1 = 0, b2 = 0;
   int sign = 0;
-  digitalWrite (this->SPICsPin, LOW); // Select adc
+  digitalWrite(this->SPICsPin, LOW); // Select adc
   noInterrupts(); //disable interrupts because SPI
   b1 = SPI.transfer(0);       // don't care what we send
   // hi byte will have XX0SBBBB
