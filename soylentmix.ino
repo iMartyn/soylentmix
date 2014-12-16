@@ -1,14 +1,18 @@
+#include <LiquidCrystal.h>
 #include <Wire.h>
 #include <SPI.h>
 #include <HardwareSerial.h>
+#include <LiquidCrystal.h>
 #include "ioexpander.h"
 #include "mixer.h"
 #include "keypad.h"
+#include "output.h"
 
   int readvalue; 
   Mixer aMixer;
   Keypad aKeypad;
-  
+  LiquidCrystal lcd(LCD_PINS);
+  Output output;
   #define LED 108
 
 void setup(){ 
@@ -22,6 +26,7 @@ void setup(){
     }
   }
   aKeypad.begin();
+  output.begin(true,&lcd);
 }
 
 
@@ -30,36 +35,36 @@ void loop() {
   float Grams;
   static int recipeIndex = 0;
   Grams = aMixer.getGrams();
-  Serial.print(Grams);
-  Serial.println(" grams");
+  output.output(Grams);
+  output.outputln(" grams");
   for (int i = 0; i<=9; i++) {
     if (readKey != -1) {    // we didn't just read a key
       readKey = aKeypad.keyScan();
       switch (readKey) {
         case 'Z':
-          Serial.println("Resetting...");
+          output.outputln("Resetting...");
           aMixer.resetZero();
           break;
         case 'C':
           if (++recipeIndex > MAX_RECIPES) {
             recipeIndex = MAX_RECIPES;
           }
-          Serial.print("Recipe ");
-          Serial.print(recipeIndex);
-          Serial.println(" selected (Jump to run)");
+          output.output("Recipe ");
+          output.output(recipeIndex);
+          output.outputln(" selected (Jump to run)");
           break;
         case 'c':
           if (--recipeIndex < 0) {
             recipeIndex = 0;
           }
-          Serial.print("Recipe ");
-          Serial.print(recipeIndex);
-          Serial.println(" selected (Jump to run)");
+          output.output("Recipe ");
+          output.output(recipeIndex);
+          output.outputln(" selected (Jump to run)");
           break;
         case 'J':
-          Serial.print("Running Recipe ");
-          Serial.print(recipeIndex);
-          Serial.println("...");
+          output.output("Running Recipe ");
+          output.output(recipeIndex);
+          output.outputln("...");
           aMixer.runRecipe(recipeIndex);
           break;
       }
