@@ -1,3 +1,5 @@
+#include <EEPROM.h>
+#include <avr/eeprom.h>
 #include <LiquidCrystal.h>
 #include <Wire.h>
 #include <SPI.h>
@@ -14,6 +16,12 @@
   LiquidCrystal lcd(LCD_PINS);
   Output output;
   #define LED 108
+  
+  struct settings_t
+{
+  char signature[8];
+  int recipes[MAX_RECIPES][MAX_HOPPERS];
+} settings;
 
 void setup(){ 
   
@@ -25,10 +33,23 @@ void setup(){
       delay(1);
     }
   }
+  readRecipes();
   aKeypad.begin();
   output.begin(true,&lcd);
 }
 
+void readRecipes() {
+  eeprom_read_block((void*)&settings, (void*)0, sizeof(settings));
+  if (settings.signature != "Recipes") {
+    writeRecipes();
+  }
+}
+
+void writeRecipes() {
+  memcpy(settings.signature,(void*)"Recipes",8);
+  memcpy(settings.recipes,aMixer.recipes,sizeof(settings.recipes));
+  eeprom_write_block((const void*)&settings, (void*)0, sizeof(settings));
+}
 
 void loop() {
   static char readKey;
