@@ -26,7 +26,6 @@ class Mixer {
     // The pins for the servos on the hoppers
     int hoppers[MAX_HOPPERS];
     const char *ingredients[MAX_HOPPERS];
-    int recipes[MAX_RECIPES][MAX_HOPPERS];
     int currentZeroReading = BASE_ZERO_READING;
     boolean readModeSPI = true;
     int analogReadPin = -1;
@@ -34,6 +33,7 @@ class Mixer {
     int takeSPIReading();
     int takeReadingActual();
 public:
+    int recipes[MAX_RECIPES][MAX_HOPPERS]; // public so we can read/write it on eeprom.
     Mixer();
     void begin();
     void setZero(int);
