@@ -9,6 +9,7 @@
 #include "mixer.h"
 #include "keypad.h"
 #include "output.h"
+#include "SoftwareServo.h"
 
   int readvalue; 
   Mixer aMixer;
@@ -52,6 +53,7 @@ void writeRecipes() {
 }
 
 void loop() {
+  SoftwareServo::refresh();
   static char readKey;
   float Grams;
   static int recipeIndex = 0;
@@ -61,6 +63,7 @@ void loop() {
   for (int i = 0; i<=9; i++) {
     if (readKey != -1) {    // we didn't just read a key
       readKey = aKeypad.keyScan();
+      SoftwareServo::refresh();
       switch (readKey) {
         case 'Z':
           output.outputln("Resetting...");
@@ -72,7 +75,7 @@ void loop() {
           }
           output.output("Recipe ");
           output.output(recipeIndex);
-          output.outputln(" selected (Jump to run)");
+          output.outputln(" (J/M)");
           break;
         case 'c':
           if (--recipeIndex < 0) {
@@ -80,7 +83,7 @@ void loop() {
           }
           output.output("Recipe ");
           output.output(recipeIndex);
-          output.outputln(" selected (Jump to run)");
+          output.outputln(" (J/M)");
           break;
         case 'J':
           output.output("Running Recipe ");
@@ -93,7 +96,9 @@ void loop() {
     if (readKey != 0) {
       readKey = -1; // if we processed a key, ignore keys for half a second.
     }
-    delay(50); //50ms * 10 = 1/2 second visual updates, but 50ms keyscans
+    delay(25); //50ms * 10 = 1/2 second visual updates, but 50ms keyscans
+    SoftwareServo::refresh();
+    delay(25);
   }
   readKey = 0;
 }
