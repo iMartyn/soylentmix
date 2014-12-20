@@ -14,7 +14,7 @@
 #define MAX_RECIPES 9
 #define DEFAULT_SPI_CS_PIN 10
 #define DEFAULT_ANALOG_PIN A0
-#define LCD_PINS 4,5,6,7,8,9
+#define LCD_PINS 9,8,4,5,6,7
 
 #define BASE_ZERO_READING 456
 // differential on SPI chip
