@@ -17,6 +17,7 @@
   LiquidCrystal lcd(LCD_PINS);
   Output output;
   #define LED 108
+  SoftwareServo testServo;
   
   struct settings_t
 {
@@ -29,14 +30,13 @@ void setup(){
   aMixer.begin();
   aMixer.setReadModeSPI(10);
   Serial.begin(115200); 
-  if (!Serial) {
-    while (!Serial) {
-      delay(1);
-    }
-  }
   readRecipes();
   aKeypad.begin();
-  output.begin(true,&lcd);
+  lcd.begin(16,2);
+  output.begin(true,&lcd,16);
+  pinMode(A0, OUTPUT);
+  testServo.attach(100);
+  
 }
 
 void readRecipes() {
@@ -57,8 +57,17 @@ void loop() {
   static char readKey;
   float Grams;
   static int recipeIndex = 0;
+  static int motorState = 180;
+  if (motorState == 180) {
+    motorState = 90;
+  } else {
+    motorState = 180;
+  }
+  testServo.write(motorState);
   Grams = aMixer.getGrams();
+  output.setCursor(0,0);
   output.output(Grams);
+//  output.setCursor(3,0);
   output.outputln(" grams");
   for (int i = 0; i<=9; i++) {
     if (readKey != -1) {    // we didn't just read a key
